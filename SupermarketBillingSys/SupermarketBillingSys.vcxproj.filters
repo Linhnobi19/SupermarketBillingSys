@@ -27,6 +27,9 @@
     <ClCompile Include="Buyer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RECEIPT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Product.h">
@@ -39,6 +42,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Buyer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RECEIPT.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

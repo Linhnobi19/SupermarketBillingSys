@@ -10,8 +10,20 @@ public:
 	Product();
 	~Product();
 
+	int getId() const;
+	std::string getName() const;
+	double getPrice() const;
+	int getAmountLeft() const;
+	short getDiscount() const;
+
+	void setID(int _id);
+	void setName(std::string _name);
+	void setPrice(double _price);
+	void setAmount(int _amount);
+	void setDiscount(short _discount);
+
 private:
-	
+	int id;
 	std::string name;
 	double price;
 	int amoutLeft;
