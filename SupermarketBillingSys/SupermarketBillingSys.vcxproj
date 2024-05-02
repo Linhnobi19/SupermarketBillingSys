@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Adminstrator.cpp" />
     <ClCompile Include="Buyer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Product.cpp" />

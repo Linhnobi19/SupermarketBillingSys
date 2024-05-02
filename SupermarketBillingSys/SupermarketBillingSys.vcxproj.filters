@@ -30,6 +30,9 @@
     <ClCompile Include="RECEIPT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Adminstrator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Product.h">

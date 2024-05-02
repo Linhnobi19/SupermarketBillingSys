@@ -1,36 +1,26 @@
-#ifndef ADMINSTRATOR_H
-#define ADMINSTRATOR_H
+#pragma once
 #include <string>
 
 class Adminstrator
 {
 public:
-	static Adminstrator* getAdmin() {
-		if (admin == nullptr)
-		{
-			admin = new Adminstrator();
+	static Adminstrator* getAdmin();
 
-			// set the user and password
-			setPassWord("doanlinh1902@gmail.com", "hoilamgi");
-		}
+	void setPassWord(const std::string& pName, const std::string& pWord);
 
-		return admin;
+	bool authenticate(const std::string& name, const std::string& pass) {
+		return (name == userName && pass == passWord);
 	}
 
 private:
 	static Adminstrator* admin;
 	Adminstrator() {};
-	static std::string userName;
-	static std::string passWord;
+	std::string userName;
+	std::string passWord;
 
-	static void setPassWord(std::string pName, std::string pWord) {
-		userName = pName;
-		passWord = pWord;
-	}
+	
 };
 
 
-
-#endif // !ADMINSTRATOR_H
 
 
