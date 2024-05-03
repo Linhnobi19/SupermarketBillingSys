@@ -8,6 +8,8 @@ class Product
 {
 public:
 	Product();
+	Product(int _id, std::string _name, double _price, int _amount, short _discount);
+	//Product(std::string _name, double _price, int _amount, short _discount);
 	~Product();
 
 	int getId() const;
@@ -23,10 +25,11 @@ public:
 	void setDiscount(short _discount);
 
 private:
+	static int TOTAL_AMOUNT;
 	int id;
 	std::string name;
 	double price;
-	int amoutLeft;
+	int amountLeft;
 	short discount;		// from 0 - 100 percent
 };
 

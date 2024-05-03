@@ -8,7 +8,7 @@ using namespace std;
 
 int main() {
 	Shopping s;
-	s.menu();
+	s.adminstrator();
 
 
 	return 0;

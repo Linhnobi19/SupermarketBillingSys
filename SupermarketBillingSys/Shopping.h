@@ -4,6 +4,7 @@
 #include "Adminstrator.h"
 #include "RECEIPT.h"
 #include <string>
+#include <vector>
 
 // for buyer shopping and admin monitor the sales
 
@@ -21,14 +22,19 @@ public:
 	void remove();		// remove product
 	void printReceipt();		// print in4 for paying the bill
 
+	
+
 private:
 	Adminstrator* admin = nullptr;
-	Product** product[100];
+	Product** product = new Product*[100];
 	Receipt* receipt;
+	bool state;		// for decide that the file for newest update or not
+	int total_product;
 
 
 	// utility for hidden the password when you type
 	std::string hiddenPassWord();
+
 };
 
 
