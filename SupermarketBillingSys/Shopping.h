@@ -35,6 +35,11 @@ private:
 	// utility for hidden the password when you type
 	std::string hiddenPassWord();
 
+	// read product file
+	void readProducts(std::string&, double&, int&, short&);
+
+	// output file
+	void outputProducts();
 };
 
 

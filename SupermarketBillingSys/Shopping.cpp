@@ -6,6 +6,7 @@
 #include <conio.h>
 #include <vector>
 #include <fstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -26,6 +27,7 @@ Shopping::Shopping()
 	admin->setPassWord("doanlinh", "hoilamgi");
 	receipt = nullptr;
 	
+	// initialize the product
 	for (size_t i = 0; i < 100; i++)
 	{
 		product[i] = nullptr;
@@ -148,36 +150,7 @@ void Shopping::add()
 	int amountLeft;
 	short discount;
 	if (!state) {
-		total_product = 0;
-		// open file that contians product
-		ifstream ifile("products.txt", ios_base::in | ios_base::app);
-		if (!ifile.is_open())
-		{
-			cout << "\n\t\t\t-> The file of the product couldn't be opened\n\n";
-			// go back to the admin menu
-			adminstrator();
-		}
-
-		// read file to add product to the list;
-		string line;
-
-		
-		while (getline(ifile, line))
-		{
-			vector<string> ans = explode(line, ';');
-			if (ans.size() < 5)
-			{
-				break;		// not contain enough data
-			}
-			total_product = stoi(ans[0]);
-			name = ans[1];
-			price = stod(ans[2]);
-			amountLeft = stoi(ans[3]);
-			discount = stoi(ans[4]);
-
-			product[total_product++] = new Product(total_product, name, price, amountLeft, discount);
-		}
-		ifile.close();
+		readProducts(name, price, amountLeft, discount);
 	}
 
 
@@ -194,7 +167,6 @@ void Shopping::add()
 		cout << "\t\t\t\tPlease enter the name of the product: ";
 		clearWhiteSpace(cin);
 		getline(cin, name);
-		//cin >> name;
 		cout << "\t\t\t\tEnter the price of the product:       ";
 		clearWhiteSpace(cin);
 		cin >> price;
@@ -249,43 +221,12 @@ void Shopping::add()
 
 void Shopping::edit()
 {
+	string name;
+	double price;
+	int amountLeft;
+	short discount;
 	if (!state) {
-		 // read file for update the product
-		// open file that contians product
-		ifstream ifile("products.txt", ios_base::in | ios_base::app);
-		if (!ifile.is_open())
-		{
-			cout << "\n\t\t\t-> The file of the product couldn't be opened\n\n";
-			// go back to the admin menu
-			adminstrator();
-		}
-
-		// read file to add product to the list;
-		string line;
-
-		total_product = 0;
-		string name;
-		double price;
-		int amountLeft;
-		short discount;
-		while (getline(ifile, line))
-		{
-			vector<string> ans = explode(line, ';');
-			if (ans.size() < 5)
-			{
-				break;		// not contain enough data
-			}
-			total_product = stoi(ans[0]);
-			name = ans[1];
-			price = stod(ans[2]);
-			amountLeft = stoi(ans[3]);
-			discount = stoi(ans[4]);
-
-			product[total_product++] = new Product(total_product, name, price, amountLeft, discount);
-		}
-		ifile.close();
-
-		
+		readProducts(name, price, amountLeft, discount);
 	}
 
 	// enter the option want to change
@@ -302,13 +243,12 @@ void Shopping::edit()
 		
 
 		if (choice >= total_product) {
-			cout << "\t\t\t--> You entered the id that doestn't has the data\n\n";
+			cout << "\t\t\t--> You entered the id that doestn't has the data\n";
 			cout << "\t\t\tYou will directed to administrator menu()\n";
 			system("pause");
 
 			adminstrator();
 		}
-		system("pause");
 	} while (choice > 99 || choice < 0);
 	
 	// edit option
@@ -377,31 +317,7 @@ void Shopping::edit()
 	}
 
 	// update to the file
-	ofstream ofile("products.txt", ios_base::out | ios_base::trunc);
-	if (!ofile.is_open())
-	{
-		cout << "\t\t\t--> Couldn't open file for update new products" << endl;
-	}
-	else
-	{
-		//cout << "Number of count is " << count << endl;
-		for (size_t i = 0; i < 99; i++)
-		{
-			if (product[i] == nullptr) continue;
-
-			cout << "The " << i << " element is tag into the file" << endl;
-			ofile << product[i]->getId() << ';'
-				<< product[i]->getName() << ';'
-				<< product[i]->getPrice() << ';'
-				<< product[i]->getAmountLeft() << ';'
-				<< product[i]->getDiscount() << endl;
-		}
-
-		cout << "\t\t\t--> Updated successfully\n";
-
-		state = true;
-	}
-	ofile.close();
+	outputProducts();
 
 	system("pause");
 	adminstrator();
@@ -410,6 +326,87 @@ void Shopping::edit()
 
 void Shopping::remove()
 {
+	string name;
+	double price;
+	int amountLeft;
+	short discount;
+	if (!state) {
+		readProducts(name, price, amountLeft, discount);
+	}
+
+	if (total_product == 0)
+	{
+		cerr << "\t\t\tYou don't have any products to remove\n";
+		cout << "\t\t\tYou will be directed to admin menu\n\n";
+		system("pause");
+		adminstrator();
+	}
+
+	int choice;
+	do
+	{
+		cout << "\t\t\tEnter the id of the product: ";
+		clearWhiteSpace(cin);
+		cin >> choice;
+		if (choice > 99 || choice < 0) {
+			cout << "\t\t\t--> You entered the id that didn't expected\n\n";
+			system("pause");
+		}
+
+
+		if (product[choice] == nullptr) {
+			cout << "\t\t\t--> You entered the id that doestn't has the data\n";
+			cout << "\t\t\tYou will directed to administrator menu()\n";
+			system("pause");
+
+			adminstrator();
+		}
+	} while (choice > 99 || choice < 0);
+	
+
+	// display information to confirm delete
+	cout << "\n\n\n";
+	cout << "\t\t\t\t ________________________________________ \n";
+	cout << "\t\t\t\t|                                        |\n";
+	cout << "\t\t\t\t|         Information to remove          |\n";
+	cout << "\t\t\t\t|________________________________________|\n\n";
+
+	cout << "\t\t\t\t" << "|      Name:       " << setw(20) << product[choice]->getName() << "  |\n";
+	cout << "\t\t\t\t" << "|      Price:      " << setw(20) << product[choice]->getPrice() << "  |\n";
+	cout << "\t\t\t\t" << "|      AmountLeft: " << setw(20) << product[choice]->getAmountLeft() << "  |\n";
+	cout << "\t\t\t\t" << "|      Discount:   " << setw(20) << product[choice]->getDiscount() << "  |\n\n";
+	
+	cout << "\t\t\tDo you want to remove this item? ('y' or 'Y' to remove) ";
+	char ch;
+	cin >> ch;
+	if (ch == 'y' || ch == 'Y')
+	{
+		delete product[choice];
+		product[choice] = nullptr;
+
+		// try to update in product line
+		int pos = choice;
+		while(true)
+		{
+			if (product[pos + 1] == nullptr)
+			{
+				delete product[pos];
+				product[pos] = nullptr;
+				break;
+			}
+			product[pos] = product[pos + 1];
+			// set new id
+			product[pos]->setID(pos);
+			pos++;
+		}
+
+		// update
+		outputProducts();
+
+		
+	}
+	system("pause");
+	adminstrator();
 }
 
 void Shopping::printReceipt()
@@ -514,4 +511,65 @@ void optionEdit() {
 	cout << "\t\t\t\t|       4. Edit the Discount             |\n";
 	cout << "\t\t\t\t|       5. Edit all information          |\n";
 	cout << "\t\t\t\t|       6. Back to main menu             |\n\n";
+}
+
+void Shopping::readProducts(string& name, double& price, int& amountLeft, short& discount) {
+	total_product = 0;
+	// open file that contians product
+	ifstream ifile("products.txt", ios_base::in | ios_base::app);
+	if (!ifile.is_open())
+	{
+		cout << "\n\t\t\t-> The file of the product couldn't be opened\n\n";
+		// go back to the admin menu
+		adminstrator();
+	}
+
+	// read file to add product to the list;
+	string line;
+
+
+	while (getline(ifile, line))
+	{
+		vector<string> ans = explode(line, ';');
+		if (ans.size() < 5)
+		{
+			break;		// not contain enough data
+		}
+		total_product = stoi(ans[0]);
+		name = ans[1];
+		price = stod(ans[2]);
+		amountLeft = stoi(ans[3]);
+		discount = stoi(ans[4]);
+
+		product[total_product++] = new Product(total_product, name, price, amountLeft, discount);
+	}
+	ifile.close();
+}
+
+void Shopping::outputProducts() {
+	ofstream ofile("products.txt", ios_base::out | ios_base::trunc);
+	if (!ofile.is_open())
+	{
+		cout << "\t\t\t--> Couldn't open file for update new products" << endl;
+	}
+	else
+	{
+		//cout << "Number of count is " << count << endl;
+		for (size_t i = 0; i < 99; i++)
+		{
+			if (product[i] == nullptr) continue;
+
+			//cout << "The " << i << " element is tag into the file" << endl;
+			ofile << product[i]->getId() << ';'
+				<< product[i]->getName() << ';'
+				<< product[i]->getPrice() << ';'
+				<< product[i]->getAmountLeft() << ';'
+				<< product[i]->getDiscount() << endl;
+		}
+
+		cout << "\t\t\t--> Updated successfully\n";
+
+		state = true;
+	}
+	ofile.close();
 }
