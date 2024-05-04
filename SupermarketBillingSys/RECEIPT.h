@@ -12,17 +12,26 @@ public:
 	Receipt();
 	~Receipt();
 
-	void addProduct(Product& p, int amount);
+	void addProduct(Product* p, int amount);
 	double totalPrice();
-	std::string getCode() const;
-	std::string getNameBuyer() const;
-	void displayList() const;
+
+	int getCode() const;
+	std::string getDate() const;
+	std::vector<std::pair<Product*, int>> getList() const;
+
+	void setCode(int&);
+	void setDate(std::string&);
+	
+	void displayList();
+	void updateToDB(bool ans);	// if the bill payed --> update to to billed
 
 private:
-	std::string codeReceipt;
-	std::string nameBuyer;
-	std::vector<std::pair<Product, int>> listPros;		// int is the amount
-	double amount;
+	int codeReceipt;		// can use the number of receipt to decide
+	std::string date;
+	std::vector<std::pair<Product*, int>> listPros;		// int is the amount
+
+	// utility for get time and date
+	void getTimeAndDate();
 };
 
 

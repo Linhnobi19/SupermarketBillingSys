@@ -140,6 +140,96 @@ void Shopping::adminstrator()
 
 void Shopping::buyer()
 {
+	
+	if (!state)
+	{
+		string name;
+		double price;
+		int amountLeft;
+		short discount;
+
+		readProducts(name, price, amountLeft, discount);
+	}
+	// while loop for choose more products
+	int productId;
+	int amount;
+	char ans  = 'y';
+	
+	receipt = new Receipt();
+	
+
+	do
+	{
+
+		// display products
+		system("cls");
+		displayProducts();
+
+		cout << "\n\n\t\t\tEnter the ID of the product you want to buy: ";
+		clearWhiteSpace(cin);
+
+		cin >> productId;
+		if (productId > total_product || productId < 0)
+		{
+			cout << "\n\t\t\t--> The product doesn't existed\n";
+			cout << "\t\t\t";
+			system("pause");
+			continue;
+		}
+		cout << "\n\t\t\tEnter the amount you want: ";
+		clearWhiteSpace(cin);
+		cin >> amount;
+		// if the amount out of range -- > error
+		if (amount < 0 || amount > product[productId]->getAmountLeft())
+		{
+			cout << "\n\t\t\t--> We don't have enough for you\n";
+			system("pause");
+			continue;
+		}
+		if (amount == 0)
+		{
+			cout << "\n\t\t\t--> Cancled this transaction\n";
+			system("pause");
+			menu();
+		}
+		receipt->addProduct(product[productId], amount);
+
+		cout << "\t\t\tDo you want to buy more products? ";
+		clearWhiteSpace(cin);
+		cin >> ans;
+	} while (ans == 'y' || ans == 'Y');
+
+	// direct to pay the bill
+	system("cls");
+	receipt->displayList();
+
+	cout << "\n\n\t\t\tYou want to pay the bill? ";
+	clearWhiteSpace(cin);
+	cin >> ans;
+	if (ans == 'y' || ans == 'Y')
+	{
+		// update bill
+		receipt->updateToDB(true);
+
+		// update new amount to the Product
+		vector<pair<Product*, int>> items = receipt->getList();
+		for (size_t i = 0; i < items.size(); i++)
+		{
+			int id = items[i].first->getId();
+			if (product[id] != nullptr)
+			{
+				product[id]->setAmount(product[id]->getAmountLeft() - items[i].second);
+			}
+		}
+		// update to file product
+		outputProducts();
+	}
+
+	// delete this current bill and return menu
+	delete receipt;
+	receipt = nullptr;
+	system("pause");
+	menu();
 }
 
 // add the product
@@ -187,31 +277,7 @@ void Shopping::add()
 
 
 	// store info into file
-	ofstream ofile("products.txt", ios_base::out | ios_base::trunc);
-	if (!ofile.is_open())
-	{
-		cout << "\t\t\t--> Couldn't open file for update new products" << endl;
-	}
-	else
-	{
-		//cout << "Number of count is " << count << endl;
-		for (size_t i = 0; i < total_product; i++)
-		{
-			if (product[i] == nullptr) continue;
-
-			//cout << "The " << i << " element is tag into the file" << endl;
-			ofile << product[i]->getId() << ';'
-				<< product[i]->getName() << ';'
-				<< product[i]->getPrice() << ';'
-				<< product[i]->getAmountLeft() << ';'
-				<< product[i]->getDiscount() << endl;
-		}
-
-		cout << "\t\t\t--> Updated successfully\n";
-
-		state = true;
-	}
-	ofile.close();
+	outputProducts();
 
 	system("pause");
 
@@ -546,6 +612,7 @@ void Shopping::readProducts(string& name, double& price, int& amountLeft, short&
 	ifile.close();
 }
 
+
 void Shopping::outputProducts() {
 	ofstream ofile("products.txt", ios_base::out | ios_base::trunc);
 	if (!ofile.is_open())
@@ -572,4 +639,45 @@ void Shopping::outputProducts() {
 		state = true;
 	}
 	ofile.close();
+}
+
+
+void Shopping::displayProducts() {
+	
+
+	cout << "\t\t\t\t ________________________________________ \n";
+	cout << "\t\t\t\t|                                        |\n";
+	cout << "\t\t\t\t|            Order products menu         |\n";
+	cout << "\t\t\t\t|________________________________________|\n\n";
+
+	cout << "\t\t";
+	for (size_t i = 0; i < 95; i++)
+	{
+		cout << '_';
+	}
+	cout << endl << endl;
+	cout << "\t\t" << setw(5) << " " << left << setw(5) << "ID" << setw(5) << " "
+		<< setw(15) << "Name" << setw(10) << " "
+		<< setw(10) << "Price" << setw(10) << " "
+		<< setw(10) << "Amount Left" << setw(10) << " "
+		<< setw(10) << "Discount" << setw(10) << " " << endl;
+	cout << "\t\t";
+	for (size_t i = 0; i < 95; i++)
+	{
+		cout << '_';
+	}
+	cout << endl << endl;
+
+	// display in4 products
+	for (size_t i = 0; i < total_product; i++)
+	{
+		cout << "\t\t" << setw(5) << " " 
+			<< left << setw(5) << product[i]->getId() << setw(5) << " "
+			<< setw(15) << product[i]->getName() << setw(10) << " "
+			<< setw(10) << product[i]->getPrice() << setw(10) << " "
+			<< setw(10) << product[i]->getAmountLeft() << setw(10) << " "
+			<< setw(10) << to_string(product[i]->getDiscount()) + "%" << setw(10) << " " << endl << endl;
+	}
+	
+
 }
