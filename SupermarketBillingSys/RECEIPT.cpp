@@ -16,7 +16,18 @@ using namespace std;
 Receipt::Receipt()
 	: codeReceipt(0), date("")
 {
-	
+	// each bill will take 2 line
+	ifstream ifile("bills.txt", ios_base::in | ios_base::beg);
+	if (!ifile.is_open())
+	{
+		cerr << "\t\t\tCounldn't open the file\n";
+	}
+	string line;
+	while (getline(ifile, line))
+	{
+		total_receipt++;
+	}
+	total_receipt /= 2;
 }
 
 Receipt::~Receipt()
@@ -54,8 +65,13 @@ std::vector<std::pair<Product*, int>> Receipt::getList() const
 	return listPros;
 }
 
+int Receipt::getTotalRe() const
+{
+	return total_receipt;
+}
 
-void Receipt::setCode(int& _code)
+
+void Receipt::setCode(int _code)
 {
 	codeReceipt = _code;
 }
@@ -65,6 +81,11 @@ void Receipt::setDate(std::string& _date)
 	date = _date;
 }
 
+void Receipt::setTotalRe(int _num)
+{
+	total_receipt = _num > total_receipt ? _num : total_receipt;
+		
+}
 
 
 void Receipt::displayList()

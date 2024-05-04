@@ -18,9 +18,11 @@ public:
 	int getCode() const;
 	std::string getDate() const;
 	std::vector<std::pair<Product*, int>> getList() const;
+	int getTotalRe() const;
 
-	void setCode(int&);
+	void setCode(int);
 	void setDate(std::string&);
+	void setTotalRe(int);
 	
 	void displayList();
 	void updateToDB(bool ans);	// if the bill payed --> update to to billed
@@ -28,6 +30,7 @@ public:
 private:
 	int codeReceipt;		// can use the number of receipt to decide
 	std::string date;
+	int total_receipt;
 	std::vector<std::pair<Product*, int>> listPros;		// int is the amount
 
 	// utility for get time and date

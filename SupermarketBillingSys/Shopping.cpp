@@ -156,7 +156,7 @@ void Shopping::buyer()
 	char ans  = 'y';
 	
 	receipt = new Receipt();
-	
+	receipt->setCode(receipt->getTotalRe() + 1);
 
 	do
 	{
@@ -210,6 +210,7 @@ void Shopping::buyer()
 	{
 		// update bill
 		receipt->updateToDB(true);
+		receipt->setTotalRe(receipt->getTotalRe() + 1);
 
 		// update new amount to the Product
 		vector<pair<Product*, int>> items = receipt->getList();
