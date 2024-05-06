@@ -128,7 +128,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Adminstrator.cpp" />
-    <ClCompile Include="Buyer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Product.cpp" />
     <ClCompile Include="RECEIPT.cpp" />
@@ -136,7 +135,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Adminstrator.h" />
-    <ClInclude Include="Buyer.h" />
     <ClInclude Include="Product.h" />
     <ClInclude Include="RECEIPT.h" />
     <ClInclude Include="Shopping.h" />

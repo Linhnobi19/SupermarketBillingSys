@@ -26,11 +26,13 @@ Shopping::Shopping()
 	admin = Adminstrator::getAdmin();
 	admin->setPassWord("doanlinh", "hoilamgi");
 	receipt = nullptr;
+	buyer = nullptr;
 	
 	// initialize the product
 	for (size_t i = 0; i < 100; i++)
 	{
 		product[i] = nullptr;
+		buyerPtr[i] = nullptr;
 	}
 }
 
@@ -158,6 +160,7 @@ void Shopping::buyer()
 	receipt = new Receipt();
 	receipt->setCode(receipt->getTotalRe() + 1);
 
+
 	do
 	{
 
@@ -198,6 +201,8 @@ void Shopping::buyer()
 		clearWhiteSpace(cin);
 		cin >> ans;
 	} while (ans == 'y' || ans == 'Y');
+	
+	
 
 	// direct to pay the bill
 	system("cls");
@@ -681,4 +686,16 @@ void Shopping::displayProducts() {
 	}
 	
 
+}
+
+int Shopping::findTheCustomer(string& num) {
+	for (size_t i = 0; i < 100; i++)
+	{
+		if (buyerPtr[i] == nullptr) continue;
+		if (buyerPtr[i]->getNum() == num)
+		{
+			return i;
+		}
+	}
+	return -1;
 }

@@ -5,6 +5,7 @@
 #include "RECEIPT.h"
 #include <string>
 #include <vector>
+#include "Buyer.h"
 
 // for buyer shopping and admin monitor the sales
 
@@ -23,6 +24,7 @@ private:
 	Adminstrator* admin = nullptr;
 	Product** product = new Product*[100];
 	Receipt* receipt;
+	Buyer** buyerPtr = new Buyer*[100];
 	bool state;		// for decide that the file for newest update or not
 	int total_product;
 
@@ -42,6 +44,9 @@ private:
 
 	// output file
 	void outputProducts();
+
+	// use to find info of the customer
+	int findTheCustomer(std::string&);
 
 	// display information of the product for buyer order
 	//void displayProducts();
