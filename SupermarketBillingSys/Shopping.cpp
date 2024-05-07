@@ -26,13 +26,11 @@ Shopping::Shopping()
 	admin = Adminstrator::getAdmin();
 	admin->setPassWord("doanlinh", "hoilamgi");
 	receipt = nullptr;
-	buyer = nullptr;
 	
 	// initialize the product
 	for (size_t i = 0; i < 100; i++)
 	{
 		product[i] = nullptr;
-		buyerPtr[i] = nullptr;
 	}
 }
 
@@ -686,16 +684,4 @@ void Shopping::displayProducts() {
 	}
 	
 
-}
-
-int Shopping::findTheCustomer(string& num) {
-	for (size_t i = 0; i < 100; i++)
-	{
-		if (buyerPtr[i] == nullptr) continue;
-		if (buyerPtr[i]->getNum() == num)
-		{
-			return i;
-		}
-	}
-	return -1;
 }

@@ -1,6 +1,5 @@
 #ifndef RECEIPT_H
 #define RECEIPT_H
-#include "Buyer.h"
 #include "Product.h"
 #include <string>
 #include <vector>
